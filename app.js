@@ -5,17 +5,19 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express')
 const mongoose = require('mongoose')
 const indexRouter = require('./routes/index')
-
-const app = express()
+const authorRouter = require('./routes/authors')
 const expressLayouts = require('express-ejs-layouts')
+const app = express()
 
 app.set('view engine', 'ejs')
-app.set('views', __dirname + '/views')
 app.set('view options', { delimiter: '?' })
+app.set('views', __dirname + '/views')
 app.set('layout', 'layouts/layout')
 app.use(expressLayouts)
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }));
 app.use('/', indexRouter)
+app.use('/authors', authorRouter)
 
 mongoose
   .connect(process.env.DATABASE_URL)
